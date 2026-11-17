@@ -1,0 +1,42 @@
+# 本地验证用 OpenSandbox Server 配置（DeepAgentsWithSandbox 项目专用）
+# 启动：opensandbox-server --config ./sandbox-local.toml
+
+[server]
+host = "127.0.0.1"
+port = 8080
+max_sandbox_timeout_seconds = 86400
+
+[log]
+level = "INFO"
+
+[runtime]
+type = "docker"
+execd_image = "sandbox-registry.cn-zhangjiakou.cr.aliyuncs.com/opensandbox/execd:v1.0.16"
+
+[storage]
+allowed_host_paths = []
+volume_default_size = "1Gi"
+
+[store]
+type = "sqlite"
+path = "~/.opensandbox/opensandbox_local.db"
+
+[docker]
+network_mode = "bridge"
+drop_capabilities = ["AUDIT_WRITE", "MKNOD", "NET_ADMIN", "NET_RAW", "SYS_ADMIN", "SYS_MODULE", "SYS_PTRACE", "SYS_TIME", "SYS_TTY_CONFIG"]
+no_new_privileges = true
+apparmor_profile = ""
+pids_limit = 4096
+seccomp_profile = ""
+host_ip = "127.0.0.1"
+
+[ingress]
+mode = "direct"
+
+[egress]
+image = "sandbox-registry.cn-zhangjiakou.cr.aliyuncs.com/opensandbox/egress:v1.0.12"
+mode = "dns"
+
+[renew_intent]
+enabled = false
+min_interval_seconds = 60

@@ -1,0 +1,8 @@
+deepagents==0.7.5
+langchain-daytona==0.0.8
+langchain-openai==1.1.12
+opensandbox==0.1.7
+opensandbox-server==0.2.1
+opensandbox-code-interpreter==0.1.2
+python-dotenv
+httpx

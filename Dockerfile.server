@@ -1,0 +1,22 @@
+# OpenSandbox Server 容器化运行（macOS Docker Desktop 专用）
+#
+# 原因：Docker Desktop for Mac 的容器跑在 Linux VM 里，macOS 宿主机上的
+# Server 进程无法直连沙箱容器的 bridge IP（健康检查/命令转发全部超时）。
+# 把 Server 也放进同一 bridge 网络即可解决。
+#
+# 构建：docker build -t opensandbox-server-local -f Dockerfile.server .
+# 运行：docker run -d --name opensandbox-server \
+#         -p 8080:8080 \
+#         -v /var/run/docker.sock:/var/run/docker.sock \
+#         -v $(pwd)/sandbox-server-container.toml:/app/sandbox.toml \
+#         -e OPENSANDBOX_INSECURE_SERVER=YES \
+#         opensandbox-server-local
+FROM python:3.11-slim
+
+RUN pip install --no-cache-dir opensandbox-server==0.2.1 \
+    -i https://mirrors.aliyun.com/pypi/simple/
+
+WORKDIR /app
+EXPOSE 8080
+
+CMD ["opensandbox-server", "--config", "/app/sandbox.toml"]

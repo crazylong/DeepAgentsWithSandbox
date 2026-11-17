@@ -1,0 +1,42 @@
+# OpenSandbox Server 容器内运行配置（配合 Dockerfile.server）
+# Server 与沙箱容器同处 docker bridge 网络，可直连容器 IP。
+
+[server]
+host = "0.0.0.0"
+port = 8080
+max_sandbox_timeout_seconds = 86400
+
+[log]
+level = "INFO"
+
+[runtime]
+type = "docker"
+execd_image = "sandbox-registry.cn-zhangjiakou.cr.aliyuncs.com/opensandbox/execd:v1.0.16"
+
+[storage]
+allowed_host_paths = []
+volume_default_size = "1Gi"
+
+[store]
+type = "sqlite"
+path = "/app/data/opensandbox.db"
+
+[docker]
+network_mode = "bridge"
+drop_capabilities = ["AUDIT_WRITE", "MKNOD", "NET_ADMIN", "NET_RAW", "SYS_ADMIN", "SYS_MODULE", "SYS_PTRACE", "SYS_TIME", "SYS_TTY_CONFIG"]
+no_new_privileges = true
+apparmor_profile = ""
+pids_limit = 4096
+seccomp_profile = ""
+host_ip = "127.0.0.1"
+
+[ingress]
+mode = "direct"
+
+[egress]
+image = "sandbox-registry.cn-zhangjiakou.cr.aliyuncs.com/opensandbox/egress:v1.0.12"
+mode = "dns"
+
+[renew_intent]
+enabled = false
+min_interval_seconds = 60
